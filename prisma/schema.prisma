@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Classrooms {
+  id    Int   @id   @default(autoincrement())
+  education_year_id   Int
+  education_term_id   Int
+  level_id    Int
+  room_id   Int
+  education_year EducationYears @relation(fields: [education_year_id], references: [id])
+  education_term EducationTerms @relation(fields: [education_term_id], references: [id])
+  level Levels @relation(fields: [level_id], references: [id])
+  room Rooms @relation(fields: [room_id], references: [id])
+  feeForClassrooms  FeeForClassroom[]
+  studentInClassroom StudentInClassroom[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model EducationYears {
+  id    Int   @id   @default(autoincrement())
+  name  String
+  classrooms Classrooms[]
+  fees Fees[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model EducationTerms {
+  id    Int   @id   @default(autoincrement())
+  name  String
+  classrooms Classrooms[]
+  fees Fees[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Levels {
+  id    Int   @id   @default(autoincrement())
+  name    String
+  classrooms Classrooms[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Rooms {
+  id    Int   @id   @default(autoincrement())
+  name  String
+  rooms Classrooms[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Fees {
+  id    Int   @id   @default(autoincrement())
+  amount    Decimal
+  name    String
+  education_year_id   Int
+  education_term_id   Int
+  education_year EducationYears @relation(fields: [education_year_id], references: [id])
+  education_term EducationTerms @relation(fields: [education_term_id], references: [id])
+  feeForClassrooms  FeeForClassroom[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model FeeForClassroom {
+  id    Int   @id   @default(autoincrement())
+  fee_id    Int
+  classroom_id    Int
+  fee          Fees       @relation(fields: [fee_id], references: [id])
+  classroom    Classrooms @relation(fields: [classroom_id], references: [id])
+  @@unique([fee_id, classroom_id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model ReceiptBooks {
+  id    Int   @id   @default(autoincrement())
+  name    String
+  total_page    Int
+  studentReceipts   StudentReceipt[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Students {
+  sid   Int   @id
+  cid   String
+  name  String
+  studentInClassroom StudentInClassroom[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model StudentInClassroom {
+  id  Int   @id   @default(autoincrement())
+  student_sid   Int
+  classroom_id   Int
+  no  Int
+  student   Students  @relation(fields: [student_sid], references: [sid])
+  classroom   Classrooms  @relation(fields: [classroom_id], references: [id])
+  studentReceipts   StudentReceipt[]
+  @@unique([student_sid, classroom_id])
+  pay_status PayStatus @default(none)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum PayStatus {
+  none
+  paying
+  done
+}
+
+model StudentReceipt {
+  id  Int   @id   @default(autoincrement())
+  student_in_classroom_id   Int
+  studentInClassroom StudentInClassroom @relation(fields: [student_in_classroom_id], references: [id])
+  amount  Int
+  receipt_book_id   Int
+  receiptBook   ReceiptBooks    @relation(fields: [receipt_book_id], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Users {
+  id  Int   @id   @default(autoincrement())
+  username  String
+  fullname  String
+  password  String
+  roleId  Int @default(1)
+  role       Roles     @relation(fields: [roleId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Roles {
+  id  Int   @id   @default(autoincrement())
+  name  String
+  users      Users[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
