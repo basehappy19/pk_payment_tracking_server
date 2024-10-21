@@ -117,7 +117,6 @@ exports.getStudentReceipts = async (req,res) => {
 exports.AddStudentReceipt = async (req, res) => {
     try {
         const { student_sid, amount, receipt_book_id } = req.body;
-        console.log(req.body);
         
         const requiredFields = {
             student_sid: 'Student Id',
