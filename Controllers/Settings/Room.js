@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const validateRequiredFields = require("../../Functions/validateRequiredFields");
+const ValidateRequiredFields = require("../../Functions/ValidateRequiredFields");
 
 exports.getRooms = async (req,res) => {
     try {
@@ -53,7 +53,7 @@ exports.AddRoom = async (req,res) => {
             name: 'Name',
         };
     
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
     
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });
@@ -89,7 +89,7 @@ exports.EditRoom = async (req,res) => {
             name: 'Name',
         };
     
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
     
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });
@@ -131,7 +131,7 @@ exports.RemoveRoom = async (req,res) => {
             id: 'Id',
         };
     
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
     
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });

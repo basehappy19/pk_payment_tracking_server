@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const validateRequiredFields = require("../../Functions/validateRequiredFields");
+const ValidateRequiredFields = require("../../Functions/ValidateRequiredFields");
 
 exports.getStudentReceipts = async (req,res) => {
     try {
@@ -124,7 +124,7 @@ exports.AddStudentReceipt = async (req, res) => {
             receipt_book_id: 'Receipt Book Id',
         };
 
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
 
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });
@@ -172,7 +172,7 @@ exports.EditStudentReceipt = async (req,res) => {
             receipt_book_id: 'Receipt Book Id',
         };
     
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
     
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });
@@ -224,7 +224,7 @@ exports.RemoveStudentReceipt = async (req,res) => {
             id: 'Id',
         };
     
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
     
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });

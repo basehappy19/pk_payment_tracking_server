@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const validateRequiredFields = require("../../Functions/validateRequiredFields");
+const ValidateRequiredFields = require("../../Functions/ValidateRequiredFields");
 
 exports.getStudents = async (req,res) => {
     try {
@@ -58,7 +58,7 @@ exports.AddStudent = async (req,res) => {
             name: 'Name',
         }
 
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
 
         const existingStudent = await prisma.students.findFirst({
             where: {
@@ -96,7 +96,7 @@ exports.EditStudent = async (req,res) => {
             sid: 'Student Id',
         };
     
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
     
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });
@@ -143,7 +143,7 @@ exports.RemoveStudent = async (req,res) => {
             sid: 'Student Id',
         };
     
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
     
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });
@@ -271,7 +271,7 @@ exports.AddStudentInClassroom = async (req,res) => {
             pay_status: 'Pay Status',
         }
 
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
 
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });
@@ -363,7 +363,7 @@ exports.EditStudentInClassroom = async (req,res) => {
             pay_status: 'Pay Status'
         };
     
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
     
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });
@@ -461,7 +461,7 @@ exports.RemoveStudentInClassroom = async (req,res) => {
             id: 'Id',
         };
     
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
     
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });
