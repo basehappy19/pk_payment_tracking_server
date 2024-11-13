@@ -109,7 +109,6 @@ exports.CheckFees = async (req, res) => {
             ...student,
             studentInClassroom: selectedStudentInClassroom,
             studentInClassrooms: enrichedStudentInClassrooms,
-            AllStudentInClassrooms: studentInClassrooms,
             pagination: {
                 next: {
                     data: selectedIndex < studentInClassrooms.length - 1 ? studentInClassrooms[selectedIndex + 1] : null,

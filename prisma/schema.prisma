@@ -126,6 +126,7 @@ model StudentReceipt {
   studentInClassroom StudentInClassroom @relation(fields: [student_in_classroom_id], references: [id])
   amount  Int
   receipt_book_id   Int
+  receipt_no  Int @default(0)
   receiptBook   ReceiptBooks    @relation(fields: [receipt_book_id], references: [id])
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
