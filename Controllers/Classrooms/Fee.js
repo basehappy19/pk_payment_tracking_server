@@ -156,7 +156,7 @@ exports.AddFeeForClassroom = async (req, res) => {
         ]);
 
         if (!fee) {
-            return res.status(200).json({ message: 'ไม่พบค่าธรรมเนียม', type: 'error' });
+            return res.status(200).json({ message: 'ไม่พบค่าบำรุงการศึกษา', type: 'error' });
         }
         if (!classroom) {
             return res.status(200).json({ message: 'ไม่พบห้องเรียน', type: 'error' });
@@ -172,7 +172,7 @@ exports.AddFeeForClassroom = async (req, res) => {
         });
 
         if(checkFeeForClassroomExist){
-            return res.status(200).json({ message: 'มีค่าธรรมเนียมในห้องนี้ซ้ำแล้ว', type: 'error' });
+            return res.status(200).json({ message: 'มีค่าบำรุงการศึกษาในห้องนี้ซ้ำแล้ว', type: 'error' });
         }
 
         await prisma.feeForClassroom.create({
@@ -183,7 +183,7 @@ exports.AddFeeForClassroom = async (req, res) => {
         });
 
         res.status(201).json({
-            message: `เพิ่มค่าธรรมเนียม ${fee.name} สำหรับห้อง ${classroom.level.name}/${classroom.room.name} ปีการศึกษา ${classroom.education_year.name} ภาคเรียนที่ ${classroom.education_term.name} เรียบร้อยแล้ว`,
+            message: `เพิ่มค่าบำรุงการศึกษา ${fee.name} สำหรับห้อง ${classroom.level.name}/${classroom.room.name} ปีการศึกษา ${classroom.education_year.name} ภาคเรียนที่ ${classroom.education_term.name} เรียบร้อยแล้ว`,
             type: 'success'
         });
 
@@ -263,7 +263,7 @@ exports.EditFeeForClassroom = async (req,res) => {
 
         if (existingFeeForClassroom) {
             return res.status(200).json({
-                message: `ค่าธรรมเนียม ${fee.name} สำหรับห้อง ${classroom.level.name}/${classroom.room.name} ปีการศึกษา ${classroom.education_year.name} ภาคเรียนที่ ${classroom.education_term.name} มีซ้ำในระบบแล้ว`,
+                message: `ค่าบำรุงการศึกษา ${fee.name} สำหรับห้อง ${classroom.level.name}/${classroom.room.name} ปีการศึกษา ${classroom.education_year.name} ภาคเรียนที่ ${classroom.education_term.name} มีซ้ำในระบบแล้ว`,
                 type: 'error',
             });
         }
@@ -277,7 +277,7 @@ exports.EditFeeForClassroom = async (req,res) => {
                 classroom_id:classroom.id,
             }
         });
-        res.json({message:`แก้ไขค่าธรรมเนียม ${fee.name} สำหรับห้อง ${classroom.level.name}/${classroom.room.name} ปีการศึกษา ${classroom.education_year.name} ภาคเรียนที่ ${classroom.education_term.name} เรียบร้อยแล้ว`,type:'success'}).status(204);
+        res.json({message:`แก้ไขค่าบำรุงการศึกษา ${fee.name} สำหรับห้อง ${classroom.level.name}/${classroom.room.name} ปีการศึกษา ${classroom.education_year.name} ภาคเรียนที่ ${classroom.education_term.name} เรียบร้อยแล้ว`,type:'success'}).status(204);
     } catch (e) {
         console.error(e);
         res.status(500).send('Server Error');
@@ -366,7 +366,7 @@ exports.RemoveFeeForClassroom = async (req,res) => {
                 id:feeForClassroom.id
             },
         });
-        res.json({message:`ลบค่าธรรมเนียม ${feeForClassroom.fee.name} สำหรับห้อง ${feeForClassroom.classroom.level.name}/${feeForClassroom.classroom.room.name} ปีการศึกษา ${feeForClassroom.classroom.education_year.name} ภาคเรียนที่ ${feeForClassroom.classroom.education_term.name} เรียบร้อยแล้ว`,type:'success'}).status(204);
+        res.json({message:`ลบค่าบำรุงการศึกษา ${feeForClassroom.fee.name} สำหรับห้อง ${feeForClassroom.classroom.level.name}/${feeForClassroom.classroom.room.name} ปีการศึกษา ${feeForClassroom.classroom.education_year.name} ภาคเรียนที่ ${feeForClassroom.classroom.education_term.name} เรียบร้อยแล้ว`,type:'success'}).status(204);
     } catch (e) {
         console.error(e);
         res.status(500).send('Server Error');

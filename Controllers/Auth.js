@@ -19,6 +19,7 @@ exports.getUserData = async (req,res) => {
                     sid:true,
                     cid:true,
                     name:true,
+                    profileImg: true,
                 }
             });
             return res.send(user).status(200);

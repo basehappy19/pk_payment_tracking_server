@@ -68,9 +68,6 @@ exports.AddUser = async (req,res) => {
     try {
         const {username, password, fullname, roleId} = req.body;
         
-        if (!username || !password || !fullname || !roleId) {
-            return res.status(400).json({ message: 'Please provide all required fields: username, password, fullname, roleId.', type: 'error'});
-        }
         const requiredFields = {
             username: 'Name',
             password: 'Password',
@@ -84,7 +81,7 @@ exports.AddUser = async (req,res) => {
             return res.status(400).json({ message: errorMessage, type: 'error' });
         }
 
-        let user = await prisma.users.findUnique({where: {username : username}});
+        let user = await prisma.users.findFirst({where: {username : username}});
                 
         if(user){
             return res.status(200).json({ message: `มีชื่อ ${username} อยู่แล้ว`, type:'error'});
@@ -127,7 +124,7 @@ exports.EditUser = async (req, res) => {
         if (password) {
             const salt = await bcrypt.genSalt(10);
             updatedPassword = await bcrypt.hash(password, salt);
-        }
+        }        
 
         await prisma.users.update({
             where: {

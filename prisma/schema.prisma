@@ -94,6 +94,7 @@ model Students {
   sid   Int   @id
   cid   String
   name  String
+  profileImg String @default("default-student.jpg")
   studentInClassroom StudentInClassroom[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt

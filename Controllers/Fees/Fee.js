@@ -128,7 +128,7 @@ exports.AddFee = async (req,res) => {
         })
 
         if(!education_year){
-            return res.status(200).json({ message: 'ไม่สามารถเพื่มค่าธรรมเนียมได้ ไม่พบปีการศึกษา', type: 'error' });
+            return res.status(200).json({ message: 'ไม่สามารถเพื่มค่าบำรุงการศึกษาได้ ไม่พบปีการศึกษา', type: 'error' });
         }
 
         const education_term = await prisma.educationTerms.findFirst({
@@ -138,11 +138,11 @@ exports.AddFee = async (req,res) => {
         })
 
         if(!education_term){
-            return res.status(200).json({ message: 'ไม่สามารถเพื่มค่าธรรมเนียมได้ ไม่พบภาคเรียน', type: 'error' });
+            return res.status(200).json({ message: 'ไม่สามารถเพื่มค่าบำรุงการศึกษาได้ ไม่พบภาคเรียน', type: 'error' });
         }
 
         await prisma.fees.create({data:{amount:amount, name:name, education_year_id:education_year.id, education_term_id:education_term.id}});
-        res.json({message: `เพิ่มค่าธรรมเนียม ${name} จำนวน ${amount} บาท ในปีการศึกษา ${education_year.name} ภาคเรียนที่ ${education_term.name} เรียบร้อยแล้ว`,type:'success'})
+        res.json({message: `เพิ่มค่าบำรุงการศึกษา ${name} จำนวน ${amount} บาท ในปีการศึกษา ${education_year.name} ภาคเรียนที่ ${education_term.name} เรียบร้อยแล้ว`,type:'success'})
     } catch (e) {
         console.error(e);
         res.status(500).send('Server Error');
@@ -174,7 +174,7 @@ exports.EditFee = async (req,res) => {
         })
 
         if(!education_year){
-            return res.status(200).json({ message: 'ไม่สามารถแก้ไขค่าธรรมเนียมได้ ไม่พบปีการศึกษา', type: 'error' });
+            return res.status(200).json({ message: 'ไม่สามารถแก้ไขค่าบำรุงการศึกษาได้ ไม่พบปีการศึกษา', type: 'error' });
         }
 
         const education_term = await prisma.educationTerms.findFirst({
@@ -184,7 +184,7 @@ exports.EditFee = async (req,res) => {
         })
 
         if(!education_term){
-            return res.status(200).json({ message: 'ไม่สามารถแก้ไขค่าธรรมเนียมได้ ไม่พบภาคเรียน', type: 'error' });
+            return res.status(200).json({ message: 'ไม่สามารถแก้ไขค่าบำรุงการศึกษาได้ ไม่พบภาคเรียน', type: 'error' });
         }
 
         await prisma.fees.update({
@@ -198,7 +198,7 @@ exports.EditFee = async (req,res) => {
                 education_term_id:education_term.id,
             }
         });
-        res.json({message:`แก้ไขค่าธรรมเนียม ${name} จำนวน ${amount} บาท ในปีการศึกษา ${education_year.name} ภาคเรียนที่ ${education_term.name} เรียบร้อยแล้ว`,type:'success'}).status(204);
+        res.json({message:`แก้ไขค่าบำรุงการศึกษา ${name} จำนวน ${amount} บาท ในปีการศึกษา ${education_year.name} ภาคเรียนที่ ${education_term.name} เรียบร้อยแล้ว`,type:'success'}).status(204);
     } catch (e) {
         console.error(e);
         res.status(500).send('Server Error');
@@ -240,7 +240,7 @@ exports.RemoveFee = async (req,res) => {
         })
 
         if(!fee){
-            return res.json({message:`ไม่สามารถลบได้ ไม่พบค่าธรรมเนียม`,type:'error'}).status(200);
+            return res.json({message:`ไม่สามารถลบได้ ไม่พบค่าบำรุงการศึกษา`,type:'error'}).status(200);
         }
 
         await prisma.fees.delete({
