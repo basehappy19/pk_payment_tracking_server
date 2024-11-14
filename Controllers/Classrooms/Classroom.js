@@ -37,24 +37,36 @@ exports.getClassroomOptions = async (req,res) => {
             }
         });
         const education_years = await prisma.educationYears.findMany({
+            orderBy:{
+                id: 'desc'
+            },
             select:{
                 id:true,
                 name:true,
             }
         });
         const education_terms = await prisma.educationTerms.findMany({
+            orderBy:{
+                id: 'asc'
+            },
             select:{
                 id:true,
                 name:true,
             }
         });
         const levels = await prisma.levels.findMany({
+            orderBy:{
+                id: 'asc'
+            },
             select:{
                 id:true,
                 name:true,
             }
         });
         const rooms = await prisma.rooms.findMany({
+            orderBy:{
+                id: 'asc'
+            },
             select:{
                 id:true,
                 name:true,
@@ -67,6 +79,7 @@ exports.getClassroomOptions = async (req,res) => {
             levels,
             rooms,
         };
+        console.log(rooms);
         
         res.send(data).status(200);
     } catch (e) {
@@ -236,7 +249,7 @@ exports.EditClassroom = async (req,res) => {
             room_id: 'Room',
         };
     
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
     
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });
@@ -322,7 +335,7 @@ exports.RemoveClassroom = async (req,res) => {
             id: 'Id',
         };
     
-        const errorMessage = validateRequiredFields(req.body, requiredFields);
+        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
     
         if (errorMessage) {
             return res.status(400).json({ message: errorMessage, type: 'error' });

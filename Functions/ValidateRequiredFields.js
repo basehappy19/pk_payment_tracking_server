@@ -1,4 +1,4 @@
-function validateRequiredFields(body, requiredFields) {
+function ValidateRequiredFields(body, requiredFields) {
     const missingFields = [];
 
     for (const [key, value] of Object.entries(requiredFields)) {
@@ -14,4 +14,4 @@ function validateRequiredFields(body, requiredFields) {
     return null;
 }
 
-module.exports = validateRequiredFields
+module.exports = ValidateRequiredFields

@@ -118,12 +118,13 @@ exports.getStudentReceipts = async (req,res) => {
 
 exports.AddStudentReceipt = async (req, res) => {
     try {
-        const { student_sid, amount, receipt_book_id } = req.body;
+        const { student_sid, amount, receipt_book_id, receipt_no } = req.body;
         
         const requiredFields = {
             student_sid: 'Student Id',
             amount: 'Amount',
             receipt_book_id: 'Receipt Book Id',
+            receipt_no: 'Receipt No'
         };
 
         const errorMessage = ValidateRequiredFields(req.body, requiredFields);
@@ -148,12 +149,13 @@ exports.AddStudentReceipt = async (req, res) => {
             data: {
                 student_in_classroom_id: studentInClassroom.id,
                 amount: amount,
-                receipt_book_id: receiptBook.id
+                receipt_book_id: receiptBook.id,
+                receipt_no: receipt_no,
             }
         });
         
         res.status(201).json({
-            message: `เพื่มใบเสร็จนักเรียน ${studentInClassroom.student_sid} จำนวน ${amount} บาท ในเล่มใบเสร็จ ${receiptBook.name} เรียบร้อยแล้ว`,
+            message: `เพื่มใบเสร็จนักเรียน ${studentInClassroom.student_sid} จำนวน ${amount} บาท ในเล่มใบเสร็จ ${receiptBook.name} เล่มที่ ${receipt_no} เรียบร้อยแล้ว`,
             type: 'success'
         });
 
@@ -165,13 +167,14 @@ exports.AddStudentReceipt = async (req, res) => {
 
 exports.EditStudentReceipt = async (req,res) => {
     try {
-        const { id, student_sid, amount, receipt_book_id } = req.body;
+        const { id, student_sid, amount, receipt_book_id, receipt_no } = req.body;
         
         const requiredFields = {
             id: 'Id',
             student_sid: 'Student Id',
             amount: 'Amount',
             receipt_book_id: 'Receipt Book Id',
+            receipt_no: 'Receipt No',
         };
     
         const errorMessage = ValidateRequiredFields(req.body, requiredFields);
@@ -209,9 +212,10 @@ exports.EditStudentReceipt = async (req,res) => {
                 student_in_classroom_id:studentInClassroom.id,
                 amount:amount,
                 receipt_book_id:receiptBook.id,
+                receipt_no: receipt_no
             }
         });
-        res.json({message:`แก้ไขใบเสร็จนักเรียน ${studentInClassroom.student_sid} จำนวน ${amount} บาท ในเล่มใบเสร็จ ${receiptBook.name} เรียบร้อยแล้ว`,type:'success'}).status(204);
+        res.json({message:`แก้ไขใบเสร็จนักเรียน ${studentInClassroom.student_sid} จำนวน ${amount} บาท ในเล่มใบเสร็จ ${receiptBook.name} เล่มที่ ${receipt_no} เรียบร้อยแล้ว`,type:'success'}).status(204);
     } catch (e) {
         console.error(e);
         res.status(500).send('Server Error');

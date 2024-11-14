@@ -21,11 +21,14 @@ model Classrooms {
   studentInClassroom StudentInClassroom[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@unique([education_year_id, education_term_id, level_id, room_id])
 }
+
 
 model EducationYears {
   id    Int   @id   @default(autoincrement())
-  name  String
+  name  String @unique 
   classrooms Classrooms[]
   fees Fees[]
   createdAt   DateTime    @default(now())
@@ -34,16 +37,17 @@ model EducationYears {
 
 model EducationTerms {
   id    Int   @id   @default(autoincrement())
-  name  String
+  name  String @unique
   classrooms Classrooms[]
   fees Fees[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
 
+
 model Levels {
   id    Int   @id   @default(autoincrement())
-  name    String
+  name    String @unique
   classrooms Classrooms[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -51,7 +55,7 @@ model Levels {
 
 model Rooms {
   id    Int   @id   @default(autoincrement())
-  name  String
+  name  String @unique
   rooms Classrooms[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -68,7 +72,10 @@ model Fees {
   feeForClassrooms  FeeForClassroom[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+
+  @@unique([name, education_year_id, education_term_id])
 }
+
 
 model FeeForClassroom {
   id    Int   @id   @default(autoincrement())
@@ -76,14 +83,15 @@ model FeeForClassroom {
   classroom_id    Int
   fee          Fees       @relation(fields: [fee_id], references: [id])
   classroom    Classrooms @relation(fields: [classroom_id], references: [id])
-  @@unique([fee_id, classroom_id])
+  @@unique([fee_id, classroom_id]) 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
 
+
 model ReceiptBooks {
   id    Int   @id   @default(autoincrement())
-  name    String
+  name    String @unique 
   total_page    Int
   studentReceipts   StudentReceipt[]
   createdAt   DateTime    @default(now())
@@ -99,7 +107,6 @@ model Students {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
-
 model StudentInClassroom {
   id  Int   @id   @default(autoincrement())
   student_sid   Int
@@ -108,7 +115,7 @@ model StudentInClassroom {
   student   Students  @relation(fields: [student_sid], references: [sid])
   classroom   Classrooms  @relation(fields: [classroom_id], references: [id])
   studentReceipts   StudentReceipt[]
-  @@unique([student_sid, classroom_id])
+  @@unique([student_sid, classroom_id]) 
   pay_status PayStatus @default(none)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -130,11 +137,13 @@ model StudentReceipt {
   receiptBook   ReceiptBooks    @relation(fields: [receipt_book_id], references: [id])
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+
+  @@unique([student_in_classroom_id, receipt_book_id, receipt_no])
 }
 
 model Users {
   id  Int   @id   @default(autoincrement())
-  username  String
+  username  String @unique
   fullname  String
   password  String
   roleId  Int @default(1)
@@ -145,7 +154,7 @@ model Users {
 
 model Roles {
   id  Int   @id   @default(autoincrement())
-  name  String
+  name  String @unique 
   users      Users[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt

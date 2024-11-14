@@ -21,9 +21,6 @@ exports.CheckFees = async (req, res) => {
                 name: true,
                 profileImg: true,
                 studentInClassroom: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    },
                     select: {
                         id: true,
                         no: true,
@@ -54,11 +51,11 @@ exports.CheckFees = async (req, res) => {
         }
 
         const studentInClassrooms = await prisma.studentInClassroom.findMany({
+            orderBy: {
+                id: 'desc'
+            },
             where: {
                 student_sid: student.sid,
-            },
-            orderBy: {
-                createdAt: 'desc'
             },
             select: {
                 id: true,
@@ -176,6 +173,9 @@ exports.CheckFeeAllStudent = async (req, res) => {
         if (req.user.roleId === 2 || req.user.roleId === 3) {
             students = await prisma.studentInClassroom.findMany({
                 where: { classroom_id: classroom.id },
+                orderBy: {
+                    id: 'asc',
+                },
                 select: {
                     student_sid: true,
                     student: {
@@ -270,11 +270,14 @@ exports.CheckFeeAllStudent = async (req, res) => {
                     return sum + (totalFeeAmount - totalPaid);
                 }, 0),
             };
-
+            const totalPaidByAllStudents = classroomFeeWithTotalFee.total_paid_by_all_students;
+            const feePerStudent = classroomFeeWithTotalFee.total_fee_amount;
             const totalExpectedAmount = students.length * classroomFeeWithTotalFee.total_fee_amount;
             const totalReceivedAmount = classroomFeeWithTotalFee.total_paid_by_all_students;
-            const totalMissingStudents = Math.floor((totalExpectedAmount - totalReceivedAmount) / classroomFeeWithTotalFee.total_fee_amount);
-
+            const totalMissingStudents = Math.ceil((totalExpectedAmount - totalReceivedAmount) / classroomFeeWithTotalFee.total_fee_amount);
+            const totalPaidStudents = Math.floor(totalPaidByAllStudents / feePerStudent);
+            
+            classroomFeeWithTotalFee.total_paid_students = totalPaidStudents;
             classroomFeeWithTotalFee.total_missing_students = totalMissingStudents;
 
         } else if (req.user.roleId === 1) {
