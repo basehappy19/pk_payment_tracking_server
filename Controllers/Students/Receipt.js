@@ -26,6 +26,7 @@ exports.getStudentReceipts = async (req,res) => {
                     { amount: isNaN(parseInt(search)) ? undefined : parseInt(search) },
                     { receiptBook: { name: { contains: search } }},
                     { receiptBook: { total_page: isNaN(parseInt(search)) ? undefined : parseInt(search) }},
+                    { receipt_no: isNaN(parseInt(search)) ? undefined : parseInt(search)},
                 ].filter(Boolean) 
             }
             : {};
@@ -85,6 +86,7 @@ exports.getStudentReceipts = async (req,res) => {
                             total_page:true,
                         }
                     },
+                    receipt_no: true,
                     createdAt:true,
                     updatedAt:true,
                 },
