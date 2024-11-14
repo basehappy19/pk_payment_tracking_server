@@ -68,30 +68,75 @@ exports.getImportOptions = async (req,res) => {
 
 exports.AddImportData = async (req, res) => {
     try {
-        const { student_id, classroom, student_name, education_year_term, receipt_book_name, receipt_no, amount } = req.body;
+        const {
+            student_id,
+            cid,
+            student_no,
+            level,
+            room,
+            education_year,
+            education_term,
+            student_name,
+            receipt_book_id,
+            receipt_no,
+            amount
+        } = req.body;
+        console.log(req.body);
+        
+        const classroom = await prisma.classrooms.upsert({
+            where: {
+                education_year_id_education_term_id_level_id_room_id: {
+                    education_year_id: parseInt(education_year),
+                    education_term_id: parseInt(education_term),
+                    level_id: parseInt(level),
+                    room_id: parseInt(room),
+                },
+            },
+            create: {
+                education_year_id: parseInt(education_year),
+                education_term_id: parseInt(education_term),
+                level_id: parseInt(level),
+                room_id: parseInt(room),
+            },
+            update: {},
+        });
 
-        const requiredFields = {
-            student_id: 'Student Id',
-            classroom: 'Classroom',
-            student_name: 'Student Name',
-            education_year_term: 'Education Year Term',
-            receipt_book_name: 'Receipt Book Name',
-            receipt_no: 'Receipt No',
-        };
+        const student = await prisma.students.upsert({
+            where: { sid: parseInt(student_id) },
+            create: { sid: parseInt(student_id), cid: cid, name: student_name },
+            update: {},
+        });
 
-        const errorMessage = ValidateRequiredFields(req.body, requiredFields);
-    
-        if (errorMessage) {
-            return res.status(400).json({ message: errorMessage, type: 'error' });
-        }
+        const studentInClassroom = await prisma.studentInClassroom.upsert({
+            where: {
+                student_sid_classroom_id: {
+                    student_sid: parseInt(student.sid),
+                    classroom_id: parseInt(classroom.id),
+                },
+            },
+            create: {
+                student_sid: parseInt(student.sid),
+                classroom_id: parseInt(classroom.id),
+                no: parseInt(student_no),
+            },
+            update: {},
+        });
+        
+        await prisma.studentReceipt.create({
+            data: {
+                student_in_classroom_id: parseInt(studentInClassroom.id),
+                receipt_book_id: parseInt(receipt_book_id),
+                receipt_no: parseInt(receipt_no),
+                amount: parseInt(amount),
+            },
+        });
 
-    
-
-    } catch (e) {
-        console.log(e);
-        res.status(500).send('Server Error');
+        res.status(201).json({ message: "นำเข้าข้อมูลเรียบร้อย", type: "success" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error");
     }
-}
+};
 
 exports.AddImportDataByCSV = async (req, res) => {
     try {
